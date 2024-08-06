@@ -1,17 +1,22 @@
 package pro.sky.StreamAPIOptional.service;
 
+import org.springframework.stereotype.Service;
 import pro.sky.StreamAPIOptional.model.Employee;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
+@Service
 public interface EmployeeService {
 
-    Employee getEmployeeWithMaxSalary (int department);
-    Employee getEmployeeWithMinSalary (int department);
+    //Метод добавить сотрудника
+    Employee add(String lastName, String firstName, String middleName, int department, int salary);
 
-    List<Employee> getAllEmployees (int department);
+    //Метод удалить сотрудника
+    Employee remove(String lastName, String firstName, String middleName, int department, int salary);
 
-    Map<Integer, List<Employee>> getAllEmployeesByDepartment();
+    //Метод найти сотрудника
+    Employee find(String lastName, String firstName, String middleName);
 
+    //Метод для получения списка
+    Collection<Employee> getAll();
 }
