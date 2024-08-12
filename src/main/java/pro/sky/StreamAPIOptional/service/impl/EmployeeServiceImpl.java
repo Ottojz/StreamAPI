@@ -1,18 +1,19 @@
 package pro.sky.StreamAPIOptional.service.impl;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import pro.sky.StreamAPIOptional.exceptions.EmployeeAlreadyAddedException;
 import pro.sky.StreamAPIOptional.exceptions.EmployeeNotFoundException;
-import pro.sky.StreamAPIOptional.exceptions.EmployeeStorageIsFullException;
 import pro.sky.StreamAPIOptional.model.Employee;
-import pro.sky.StreamAPIOptional.service.DepartmentService;
 import pro.sky.StreamAPIOptional.service.EmployeeService;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-@Service
-public class DepartmentEmployeeServiceImpl implements EmployeeService, DepartmentService {
+@Component
+public class EmployeeServiceImpl implements EmployeeService {
+
     private final Map<String, Employee> employees = new HashMap<>(Map.of(
             "employee1", new Employee("Ivanova", "Ivanna", "Petrovna", 1, 51_000),
             "employee2", new Employee("Петров", "Иван", "Иванович", 3, 150_000),
@@ -27,7 +28,7 @@ public class DepartmentEmployeeServiceImpl implements EmployeeService, Departmen
     private final int maxSize = 15;
 
     @Override
-    public Employee add(String lastName, String firstName, String middleName, int department, int salary) throws EmployeeStorageIsFullException, EmployeeAlreadyAddedException {
+    public Employee add(String lastName, String firstName, String middleName, int department, int salary) {
         Employee employee = new Employee(lastName, firstName, middleName, department, salary);
         if (employees.size() > maxSize){
             throw new EmployeeNotFoundException("Достигнут лимит количества сотрудников в фирме");
@@ -40,7 +41,7 @@ public class DepartmentEmployeeServiceImpl implements EmployeeService, Departmen
     }
 
     @Override
-    public Employee remove(String lastName, String firstName, String middleName, int department, int salary) throws EmployeeNotFoundException {
+    public Employee remove(String lastName, String firstName, String middleName, int department, int salary) {
         Employee employee = new Employee(lastName, firstName, middleName, department, salary);
         if (!employees.containsKey(employee.getFullName())) {
             throw new EmployeeNotFoundException("Данный сотрудник не найден");
@@ -53,7 +54,7 @@ public class DepartmentEmployeeServiceImpl implements EmployeeService, Departmen
     }
 
     @Override
-    public Employee find(String lastName, String firstName, String middleName) throws EmployeeNotFoundException {
+    public Employee find(String lastName, String firstName, String middleName) {
         Employee employee = new Employee(lastName, firstName, middleName);
         if (!employees.containsKey(employee.getFullName())) {
             throw new EmployeeNotFoundException("Данный сотрудник не найден");
@@ -64,38 +65,5 @@ public class DepartmentEmployeeServiceImpl implements EmployeeService, Departmen
     @Override
     public Collection<Employee> getAll() {
         return Collections.unmodifiableCollection(employees.values());
-    }
-
-    @Override
-    public Employee getEmployeeWithMaxSalary(int department) {
-        return employees.values()
-                .stream()
-                .filter(employee -> employee.getDepartment() == department)
-                .max(Comparator.comparing(Employee::getSalary))
-                .orElse(null);
-    }
-
-    @Override
-    public Employee getEmployeeWithMinSalary(int department) {
-        return employees.values()
-                .stream()
-                .filter(employee -> employee.getDepartment() == department)
-                .min(Comparator.comparing(Employee::getSalary))
-                .orElse(null);
-    }
-
-    @Override
-    public List<Employee> getAllEmployees(int department) {
-        return employees.values()
-                .stream()
-                .filter(employee -> employee.getDepartment() == department)
-                .toList();
-    }
-
-    @Override
-    public Map<Integer, List<Employee>> getAllEmployeesByDepartment() {
-        return employees.values()
-                .stream()
-                .collect(Collectors.groupingBy(Employee::getDepartment));
     }
 }
