@@ -1,5 +1,8 @@
 package pro.sky.StreamAPIOptional.model;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Locale;
 import java.util.Objects;
 
 public class Employee {
@@ -14,20 +17,24 @@ public class Employee {
     private static int counter; //Базовая сложность - 2 - добавлена статическая переменная-счетчик id
 
     public Employee(String lastName, String firstName, String middleName, int department, int salary) {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.fullName = lastName + " " + firstName + " " + middleName;
+        this.lastName = StringUtils.capitalize(lastName.toLowerCase());
+        this.firstName = StringUtils.capitalize(firstName.toLowerCase());
+        this.middleName = StringUtils.capitalize(middleName.toLowerCase());
+        this.fullName = StringUtils.capitalize(lastName.toLowerCase()) + " " +
+                StringUtils.capitalize(firstName.toLowerCase()) + " " +
+                StringUtils.capitalize(middleName.toLowerCase());
         this.department = department;
         this.salary = salary;
         id = ++counter; //Базовая сложность - 3 - поле "id" проставляется из счетчика
     } //Базовая сложность - 6 - реализован конструктор, который заполняет все поля, кроме поля id, которое получает информацию из счетчика
 
     public Employee(String lastName, String firstName, String middleName) {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.fullName = lastName + " " + firstName + " " + middleName;
+        this.lastName = StringUtils.capitalize(lastName.toLowerCase());
+        this.firstName = StringUtils.capitalize(firstName.toLowerCase());
+        this.middleName = StringUtils.capitalize(middleName.toLowerCase());
+        this.fullName = StringUtils.capitalize(lastName.toLowerCase()) + " " +
+                StringUtils.capitalize(firstName.toLowerCase()) + " " +
+                StringUtils.capitalize(middleName.toLowerCase());
         id = ++counter;
     }
 
